@@ -8,58 +8,34 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import GoalInput from './components/GoalInput';
 import GoalItem from './components/GoalItem';
 
 export default function App() {
   // var uuid = require('react-native-uuid');
 
-  const [enteredGoal, setEnteredGoal] = useState('');
   const [courseGoals, setCourseGoals] = useState([]);
 
-  const goalInputHandler = (enteredText) => {
-    setEnteredGoal(enteredText);
-  };
-
-  const addGoalHandler = () => {
+  const addGoalHandler = (goalTitle) => {
     // setCourseGoals([...courseGoals, enteredGoal]); // not 100% guranteed
     setCourseGoals((currentGoals) => [
       ...currentGoals,
-      { id: Math.random().toString(), value: enteredGoal },
+      { id: Math.random().toString(), value: goalTitle },
     ]); //100% guranteed it will give the current state
     // setEnteredGoal('');
   };
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={goalInputHandler}
-          value={enteredGoal}
-        />
-        <Button title='ADD' onPress={addGoalHandler} />
-      </View>
-      <View>
-        <FlatList
-          keyExtractor={(item, index) => item.id}
-          data={courseGoals}
-          renderItem={(itemData) => <GoalItem title={itemData.item.value} />}
-        />
-      </View>
+      <GoalInput onAddGoal={addGoalHandler} />
+      <FlatList
+        keyExtractor={(item, index) => item.id}
+        data={courseGoals}
+        renderItem={(itemData) => <GoalItem title={itemData.item.value} />}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { padding: 50 },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  textInput: {
-    width: '80%',
-    borderColor: 'black',
-    borderWidth: 1,
-    padding: 10,
-  },
 });
